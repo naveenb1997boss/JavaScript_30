@@ -1,0 +1,76 @@
+<html>
+    <head>
+        <style>
+            body{
+                text-align:center;
+            }
+            .clock{
+                width: 20rem;
+                height: 20rem;
+                border: 2px dotted black;
+                border-radius: 50%;
+                position:relative;
+            }
+            .s_hand{
+                width:50%;
+                height:2px;
+                background:tomato;
+                position:absolute;
+                top:50%;
+                transform-origin:100%;
+                transform: rotate(90deg);
+                transition: all 0.5s;
+                transition-timing-function:ease-in-out;
+            }
+            .m_hand{
+                width:50%;
+                height:2px;
+                background:black;
+                position:absolute;
+                top:50%;
+                transform-origin:100%;
+                transform: rotate(90deg);
+                transition: all 0.5s;
+                transition-timing-function:ease-in-out;
+            }
+            .h_hand{
+                width:50%;
+                height:2px;
+                background:black;
+                position:absolute;
+                top:50%;
+                transform-origin:100%;
+                transform: rotate(90deg);
+                transition: all 0.5s;
+                transition-timing-function:ease-in-out;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="clock">
+            <div class="s_hand"></div>
+            <div class="m_hand"></div>
+            <div class="h_hand"></div>
+        </div>
+        <script>
+            const shand=document.querySelector('.s_hand');
+            const mhand=document.querySelector('.m_hand');
+            const hhand=document.querySelector('.h_hand');
+            function setdate()
+            {
+                const  ftime=new Date();
+                const sec=ftime.getSeconds();
+                const min=ftime.getMinutes();
+                const hour=ftime.getHours();
+                var secdeg=(6*sec)+90;
+                shand.style.transform=`rotate(${secdeg}deg)`;
+                var mindeg=(6*min)+90;
+                mhand.style.transform=`rotate(${mindeg}deg)`;
+                var hdeg=(30*hour)+90;
+                hhand.style.transform=`rotate(${hdeg}deg)`;
+                console.log(hour+":"+min+":"+sec);
+            }
+            setInterval(setdate, 1000);
+        </script>
+    </body>
+</html>

@@ -1,0 +1,38 @@
+* {
+    margin: 2px;
+}
+
+body {
+    font-size: 24px;
+    color: white;
+    text-align: center;
+}
+
+.flex-main {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    flex: 1;
+    height: 100%;
+    width: 100%;
+}
+
+.flex-nav {
+    background-color: #B95F21;
+    flex: .3 1 5rem;
+    padding-top: 3rem;        
+}
+
+.flex-article {
+    background-color: #81A43C; 
+    flex: 3 3 ; 
+    padding-top: 3rem;
+    align-items: center;
+    justify-content: center;    
+}
+
+@media all and (max-width: 540px) {
+    .flex-main {
+        flex-direction: column;
+    }
+}

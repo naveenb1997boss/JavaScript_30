@@ -1,0 +1,169 @@
+var client;
+var relatedContactsEmail;
+var contactEmailRegex;
+var accountName;
+var accountNameRegex;
+var leadDetails;
+var insertString;
+var accountId;
+var accountWeb;
+var accountWebRegEx;
+
+$(document).ready( function() 
+{
+    app.initialized()
+    .then(function(_client) {
+        client = _client;
+        startApp();
+        client.events.on("app.activated",
+            function() {
+                //Your code here
+               startApp();
+            });    
+                    
+    });
+
+});
+function startApp(){
+    console.log("---------------------------------------In app activated");
+    client.data.get("currentEntityInfo").then(data=> {
+        console.log(data.currentEntityInfo.currentEntityType);
+        if(data.currentEntityInfo.currentEntityType === "sales_account")                // Executes only when the page is of any Sales_account
+        {
+            accountId= data.currentEntityInfo.currentEntityId;
+            console.log("-----------",accountId);
+            findingLeads();
+        }
+        else{
+            document.getElementById("change").innerHTML="<h2>No Data Found</h2>";
+        }
+    });
+}
+function accountEmailFormat(){
+
+    (client.request.get(`https://naveenbaskaran.freshsales.io/api/sales_accounts/${accountId}?include=contacts`, {
+                    headers: {
+                        Authorization: "Token token=BIAjwj0XMlwi4-TVdSC2Vg",
+                    }
+                    })
+                    .then(val=> {
+                        // console.log(JSON.parse(val.response).contacts[0],"---------b=========");
+                        if(JSON.parse(val.response).contacts[0])                                        // Only if the related contacts have the email
+                        {
+                        relatedContactsEmail=JSON.parse(val.response).contacts[0].email.split("@");    //making the RegEx for the email
+                        contactEmailRegex=new RegExp(relatedContactsEmail[1],'i');
+                        }
+                    })
+    )
+    return contactEmailRegex;
+}
+
+function accountWebFormat(){
+    (client.request.get(`https://naveenbaskaran.freshsales.io/api/sales_accounts/${accountId}`, {
+                    headers: {
+                        Authorization: "Token token=BIAjwj0XMlwi4-TVdSC2Vg",
+                    }
+                    }))
+    .then(val=> {
+        accountWeb=JSON.parse(val.response).sales_account.website;
+        accountWebRegEx= new RegExp(accountWeb,'i');
+    })
+    return accountWebRegEx;
+}
+
+
+function accountNameFormat(){
+    console.log(accountId,"------------");
+    client.request.get(`https://naveenbaskaran.freshsales.io/api/sales_accounts/`+accountId, {
+                    headers: {
+                        Authorization: "Token token=BIAjwj0XMlwi4-TVdSC2Vg",
+                    }
+                    })
+                    .then(val=> {
+                        accountName=JSON.parse(val.response).sales_account.name.split(" ");
+                        accountNameRegex=new RegExp(accountName[0],'i');            //making RegEx for with the company name
+                        
+                    });
+    return accountNameRegex;
+
+}
+
+
+function findingLeads(){
+    console.log("Iam here");
+    client.request.get("https://naveenbaskaran.freshsales.io/api/leads/view/5000488522", {
+            headers: {
+                Authorization: "Token token=BIAjwj0XMlwi4-TVdSC2Vg",
+            }
+    })
+    .then(val=>{
+        
+        leadDetails=JSON.parse(val.response);
+        insertString="";
+        console.log("In findingLead",leadDetails);
+        leadDetails.leads.forEach(lead =>{                                  //looping with all available leads
+            
+            // console.log(accountWebRegEx);
+            // if(contactEmailRegex){console.log(contactEmailRegex,"-------");}
+            if((lead.email.match(accountEmailFormat()) && contactEmailRegex))
+            {
+                console.log(contactEmailRegex);
+                insertString=insertString+`<div class="flex card">
+                    <div class="flex1">${lead.first_name.split('')[0]}</div>
+                    <div class="flex2"><h3>${lead.first_name} ${lead.last_name}</h3>
+                                        ${lead.email}</div>
+                </div><br>`;
+                // console.log(insertString);
+                console.log("Email");
+            }
+
+            else if(lead.email.match(accountWebFormat()) && accountWebRegEx)
+            {
+                console.log(accountWebRegEx);
+                insertString=insertString+`<div class="flex card">
+                    <div class="flex1">${lead.first_name.split('')[0]}</div>
+                    <div class="flex2"><h3>${lead.first_name} ${lead.last_name}</h3>
+                                        ${lead.email}</div>
+                </div> <br>`;
+                // console.log(insertString);
+                console.log("web");
+            }
+
+            else if( lead.email.match(accountNameFormat()) && accountNameRegex)
+            {
+                console.log(accountNameRegex);
+                insertString=insertString+`<div class="flex card">
+                    <div class="flex1">${lead.first_name.split('')[0]}</div>
+                    <div class="flex2"><h3>${lead.first_name} ${lead.last_name}</h3>
+                                        ${lead.email}</div>
+                </div> <br>`;
+                // console.log(insertString);
+                console.log("Name",insertString);
+
+            }
+        
+        });
+        constructString(insertString);
+    });
+}
+
+function constructString(insertString){
+    if(insertString)        //if inserting string is not empty
+        {
+            document.getElementById("change").innerHTML="<h2></h2>"
+            var inserting=document.querySelector(".toInsert");
+            inserting.innerHTML=insertString;
+            insertString="";
+        }
+        else{                   //if no matches were found among the leads
+            document.getElementById("change").innerHTML="<h2>No Data Found</h2>";
+        }
+}
+
+function openModal() {
+    client.interface.trigger('showModal', {title: 'Add Integration Action', template: 'modal.html'});
+}
+
+function closePopup() {
+    client.instance.close();
+}

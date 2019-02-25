@@ -1,0 +1,61 @@
+<html>
+    <body>
+
+
+
+        <select id="selection">
+            <option value="A">A</option>
+            <option value="B">B</option>
+            <option value="C">C</option>
+        </select>
+        <button onclick="buttonClick()">Click</button>
+
+       <form onsubmit="return validate()">
+        <input type="text" id="userName" >
+        <input type="password" id="password" >
+        <button type="submit">Submit</button> 
+        </form>
+        
+
+
+
+        <script>
+            let b = prompt("enter a data");
+            alert(typeof(b));
+
+            function validate()
+            {
+                let userName=document.querySelector('#userName');
+                let password=document.querySelector('#password');
+                console.log(userName.value," ",password.value);
+                
+                if(userName.value==""||password.value==""){
+                    alert("Dont Leave Blank");
+                    return false;
+
+                }
+                else if(password.value.length < 8){
+                    alert("Too Short Password");
+                    return false;
+                }
+                else{
+                    return true;
+                }
+            }
+            function buttonClick()
+            {
+               const inputText=document.querySelector("#selection");
+               console.log(inputText.options[inputText.selectedIndex]);
+            }    
+
+
+
+            let buttons=document.getElementsByTagName('button');
+            console.log(buttons);
+            buttons.addEventListener('click', ran);
+            function ran(){
+                console.log('ran');
+            }
+        </script>
+    </body>
+</html>

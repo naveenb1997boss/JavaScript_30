@@ -1,0 +1,38 @@
+<html>
+    <head>
+        <style>
+
+            .keyDefault{
+                color: blue;
+            }
+            .strike{
+                color:black;
+            }
+
+        </style>    
+    </head>
+    <body>
+        <div class="keyDefault">
+            <div class="key" data-key="65">
+                <kbd>A</kbd>
+            </div>
+            <div class="key" data-key="66">
+                <kbd>B</kbd>
+            </div>
+            <div class="key" data-key="67">
+                <kbd>C</kbd>
+            </div>
+        </div>      
+        <script>
+        
+        const keyStroke=document.addEventListener('keydown',disp);
+        function disp(e){
+           const a= document.querySelector(`.key[${e.keyCode}]`);
+            console.log(a);
+        }
+        
+        </script>
+    
+    </body>
+    
+</html>

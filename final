@@ -1,0 +1,303 @@
+var client;
+var relatedContactsEmail;
+var contactEmailRegex;
+var accountName;
+var accountNameRegex;
+var leadDetails;
+var insertString;
+var accountId;
+
+// var template=$("#template").html();
+// var compileTemplate=Handlebars.compile(template);
+
+$(document).ready( function() {
+    app.initialized()
+        .then(function(_client) {
+            client = _client;
+            client.events.on("app.activated",
+                function() {
+                    //Your code here
+                    
+                    client.data.get("currentEntityInfo").then(data=> {
+                        console.log(data.currentEntityInfo.currentEntityType);
+                        if(data.currentEntityInfo.currentEntityType === "sales_account")    // Executes only when the page is of any Sales_account
+                        {
+                            accountId= data.currentEntityInfo.currentEntityId;
+                            console.log("-----------",accountId);
+                            accountEmailFormat();
+                            accountNameFormat();
+                            findingLeads();
+                        }
+                        else{
+                            document.getElementById("change").innerHTML="<h2>No Data Found</h2>";
+                        }
+                    });
+
+                    
+                    
+                    
+                });    
+                    
+    });
+
+});
+
+function accountEmailFormat(){
+
+    (client.request.get(`https://naveenbaskaran.freshsales.io/api/sales_accounts/${accountId}?include=contacts`, {
+                    headers: {
+                        Authorization: "Token token=BIAjwj0XMlwi4-TVdSC2Vg",
+                    }
+                    })
+                    .then(val=> {
+                        // console.log(JSON.parse(val.response).contacts[0],"---------b=========");
+                        if(JSON.parse(val.response).contacts[0])                                            // Only if the related contacts have the email
+                            {relatedContactsEmail=JSON.parse(val.response).contacts[0].email.split("@");    //making the RegEx for the email
+                            contactEmailRegex=new RegExp(relatedContactsEmail[1],'i');
+                            // console.log(relatedContactsEmail);
+                            // console.log("-------------------"); 
+                            // console.log(contactEmailRegex);
+                        }
+                    }))
+                
+}
+
+
+function accountNameFormat(){
+    console.log(accountId,"------------");
+    client.request.get(`https://naveenbaskaran.freshsales.io/api/sales_accounts/`+accountId, {
+                    headers: {
+                        Authorization: "Token token=BIAjwj0XMlwi4-TVdSC2Vg",
+                    }
+                    })
+                    .then(val=> {
+                        accountName=JSON.parse(val.response).sales_account.name.split(" ");
+                        accountNameRegex=new RegExp(accountName[0],'i');            //making RegEx for with the company name
+                        // console.log(accountNameRegex,"-------------");
+                    });
+                
+}
+
+
+function findingLeads(){
+    
+    client.request.get("https://naveenbaskaran.freshsales.io/api/leads/view/5000488522", {
+            headers: {
+                Authorization: "Token token=BIAjwj0XMlwi4-TVdSC2Vg",
+            }
+            })
+            .then(val=>{
+                // console.log(JSON.parse(val.response).leads);
+                // console.log(accountNameRegex);
+                // console.log(contactEmailRegex);
+                leadDetails=JSON.parse(val.response);
+                // let fragDocument=document.createDocumentFragment();
+                insertString="";
+                leadDetails.leads.forEach(lead =>{                                  //looping with all available leads
+                    // console.log(leadDetails.leads[i].email);
+
+                    
+
+                    if(contactEmailRegex){console.log(contactEmailRegex,"-------");}
+                    if((lead.email.match(contactEmailRegex) && contactEmailRegex)){
+                        // matches.push(lead);
+                        // // console.log(matches);
+                        // insertString=insertString+`<tr>
+                        //     <td>${lead.first_name}</td>
+                        //     <td>${lead.last_name}</td>
+                        //     <td>${lead.email}</td>
+                        // </tr>`;
+                        insertString=insertString+`<div class="flex card">
+                            <div class="flex1">${lead.first_name.split('')[0]}</div>
+                            <div class="flex2"><h3>${lead.first_name} ${lead.last_name}</h3>
+                                                ${lead.email}</div>
+                            <div class="flex3"><button class="btn">Edit</button></div>
+                        </div><br>`;
+                        // console.log("initially",fragDocument);
+                        // let tr=document.createElement('tr');
+                        // let td1=document.createElement('td');
+                        // td1.appendChild(document.createTextNode(`${lead.first_name}`));
+                        // let td2=document.createElement("td");
+                        // td2.appendChild(document.createTextNode(`${lead.last_name}`));
+                        // let td3=document.createElement("td");
+                        // td3.appendChild(document.createTextNode(`${lead.email}`));
+                        // tr.appendChild(td1);
+                        // tr.appendChild(td2);
+                        // tr.appendChild(td3);
+                        // fragDocument.append(tr);
+                        // console.log(fragDocument);
+                        // let tr=document.createElement('tr');
+                        // let td1=document.createElement('td').appendChild(document.createTextNode(`${lead.first_name}`));
+                        // let td2=document.createElement("td").appendChild(document.createTextNode(`${lead.last_name}`));
+                        // let td3=document.createElement("td").appendChild(document.createTextNode(`${lead.email}`));
+                        // tr.appendChild(td1);
+                        // tr.appendChild(td2);
+                        // tr.appendChild(td3);
+                        // console.log(tr);
+                        // console.log(insertString);
+                        /*  tr=document.createElement('tr')
+                            td1=document.createElement("td").appendChild(document.createTextNode(${lead.first_name}))
+                            
+                            td2=document.createElement("td").appendChild(document.creteTextNode(${lead.last_name}))
+                            
+                            
+                            td3=document.createElement("td").appendcreateTextNode(${lead.email})
+
+
+                            tr.appendChild(td1);
+                            tr.appendChild(td2);
+                            tr.appendChild(td3);
+                            $(".toInsert").innerHTML.appendChild(tr);
+                            */
+                    }
+                    else if( lead.email.match(accountNameRegex)){
+                        // matches.push(lead);
+                        // console.log(matches);
+                        // insertString=insertString+`<tr>
+                        //     <td>${lead.first_name}</td>
+                        //     <td>${lead.last_name}</td>
+                        //     <td>${lead.email}</td>
+                        // </tr>`;
+                        insertString=insertString+`<div class="flex card">
+                            <div class="flex1">${lead.first_name.split('')[0]}</div>
+                            <div class="flex2"><h3>${lead.first_name} ${lead.last_name}</h3>
+                                                ${lead.email}</div>
+                            <div class="flex3"><button class="btn">Edit</button></div>
+                        </div> <br>`;
+                        console.log(insertString);
+                        // console.log("initially",fragDocument);
+                        // let tr=document.createElement('tr');
+                        // let td1=document.createElement('td');
+                        // td1.appendChild(document.createTextNode(`${lead.first_name}`));
+                        // let td2=document.createElement("td");
+                        // td2.appendChild(document.createTextNode(`${lead.last_name}`));
+                        // let td3=document.createElement("td");
+                        // td3.appendChild(document.createTextNode(`${lead.email}`));
+                        // tr.appendChild(td1);
+                        // tr.appendChild(td2);
+                        // tr.appendChild(td3);
+                        // fragDocument.append(tr);
+                        // console.log(fragDocument);
+                        /* document.createElement('tr')
+                            createNodeElement("td")
+                            creteTextNode(${lead.first_name})
+                            appendChild above two
+                            createNodeElement("td")
+                            creteTextNode(${lead.last_name})
+                            appendChild
+                            createNodeElement("td")
+                            creteTextNode(${lead.email})
+                            append
+                            as a whole append with tr node
+                            */
+                    }
+                });
+                var inserting=document.querySelector(".toInsert");
+                // console.log(inserting.innerHTML);
+                // inserting.append(fragDocument);
+                // console.log("finally",fragDocument);
+                inserting.innerHTML=insertString;
+                insertString="";
+                // $(".toInsert").html(compileTemplate({matches}));
+                
+            })
+}
+
+
+
+function openModal() {
+    client.interface.trigger('showModal', {title: 'Add Integration Action', template: 'modal.html'});
+}
+
+function closePopup() {
+    client.instance.close();
+}
+
+
+-------------------------------Java script----------------Final---------------------------------------
+
+
+<!doctype html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+      <link rel="stylesheet" href="https://static.freshdev.io/fdk/2.0/assets/freshsales.css">
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
+      <script src="https://static.freshdev.io/fdk/2.0/assets/fresh_client.js"></script>
+      <script src="app.js"></script>
+      <script src="jquery-3.3.1.min.js"></script>
+      <script src="handlebars-v4.0.12.js"></script> 
+      <style>
+         .flex{
+                display: flex;
+                flex-flow: row;
+                align-items: center;
+                border:1px solid whitesmoke;
+                border-radius: 5px;
+                box-shadow: 1px 1px 1px gray;
+                align-items: center;
+            }
+            .flex1{
+               background: blue;
+               border-radius: 50%;
+               width: 50px;
+               height: 50px;
+               color: white;
+               flex-grow: 0;
+               text-align: center;
+               padding: 15px;
+            }
+            .flex2{
+               margin-left: 15px;
+               flex-grow: 8;
+               color: grey;
+            }
+            .flex3{
+               flex-grow: 0;
+               padding: 20px;
+            }
+            button{
+               background: blue;
+               color: white;
+            }
+            h3{
+               color:black;
+            }
+   </style>  
+   </head>
+   <body>
+      <div class="container">
+         <div class="align-middle" style="margin-top: 50px">
+            <h1>Related Leads</h1>
+         <!-- <table class="table table-hover">
+            <thead>  
+               <tr>
+                  <th>Firstname</th>
+                  <th>Lastname</th>
+                  <th>Email</th>
+               </tr>
+            </thead>                                
+            <tbody class="toInsert"></tbody> -->
+            <div class="toInsert"></div>
+            <!-- <script type="text/x-handlebars-template" id="template">
+               {{each #matches}}   
+                  <tr>
+                        <td>{{first_name}}</td>
+                        <td>{{second_name}}</td>
+                        <td>{{email}}</td>
+                  </tr>
+               {{/each}}
+            </script> -->
+            <!-- </table> -->
+            <br><br>
+            <h2 id="change"></h2>
+         </div>
+         <br/>
+      </div>
+   </body>
+</html>
+
+
+-----------------------------------------Html-------------Final---------------------------------------
+

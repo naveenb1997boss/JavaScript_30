@@ -1,0 +1,57 @@
+<html>
+<body>
+    <canvas id="draw" width="800" height="800"></canvas>
+<script>
+
+    const canvas= document.querySelector('#draw');
+    const ctx= canvas.getContext('2d');
+    canvas.width= window.innerWidth;
+    canvas.height= window.innerHeight;
+    let hue=0;
+    ctx.strokeStyle= `hsl(${hue},100%,50%)`;
+    ctx.lineJoin='round';
+    ctx.lineCap='round';
+    let line_width=5;
+
+    let isdraw= false;
+    let lastX=0;
+    let lastY=0;
+
+
+
+
+    function draw(e){
+        if(!isdraw) return;
+        console.log(e);
+        ctx.strokeStyle= `hsl(${hue},100%,50%)`;
+        ctx.lineWidth= line_width;
+        ctx.beginPath();
+        ctx.moveTo(lastX, lastY);
+        ctx.lineTo(e.offsetX, e.offsetY);
+        ctx.stroke();
+        lastX=e.offsetX;
+        lastY=e.offsetY;
+        hue++;
+        line_width++;
+        if(line_width>=100){
+            line_width=5;
+        }
+        if(hue >=360){
+            hue=0;
+        }
+    }
+    function click(e){
+        isdraw=true;
+        lastX=e.offsetX;
+        lastY=e.offsetY;
+    }
+    function release(e){
+        isdraw=false;
+    }
+    document.addEventListener('mousemove',draw);
+    document.addEventListener('mousedown',click);
+    document.addEventListener('mouseup',release);
+    document.addEventListener('mouseout',()=> isdraw=false);
+</script>
+</body>
+</html>

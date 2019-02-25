@@ -1,0 +1,27 @@
+Java Script:
+
+
+Console Output:
+
+syntax:
+	CONSOLE.LOG();
+
+
+
+Eventlisteners:
+
+Syntax:
+      CONST VAR_NAME= WINDOW.ADDEVENTLISTENER(STATUS CHECK,FUNCTION_TO_BE_EXECUTED);
+or
+                      VAR_NAME.ADDEVENTLISTENER(STATUS CHECK,FUNCTION_TO_BE_EXECUTED);
+d
+
+
+Adding a Css Class:
+
+Syntax:
+	selecting the query based on selection:
+		DOCUMENT.QUERYSELECTOR();
+	adding or removing:
+		KEY.CLASSLIST.ADD('class_name');
+

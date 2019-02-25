@@ -1,0 +1,18 @@
+<html>
+<body>
+<script>
+const data=['car','bike','car','car','van'];
+
+const red=data.reduce(function(object , item) {
+if(!object[item]){ 
+object[item]=0;
+}
+object[item]++;
+return object;
+},
+{//object declaration
+});
+console.log(red)
+</script>
+</body>
+</html>

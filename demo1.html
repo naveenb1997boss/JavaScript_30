@@ -1,0 +1,57 @@
+<html>
+    <head>
+        <title>Demo</title>
+    </head>
+    <style>
+    .key{
+
+        color: red;
+        padding:5px;
+        transition: all 1s;
+        text-align: center;
+        border:2px solid black;
+    }
+    .playing{
+        color:royalblue;
+        transform:scale(1.1);
+        border-color:white;
+        
+    }
+    </style>
+    <body>
+        <div data-key="65" class="key">
+            <kbd>A</kbd><br>
+            <span>Clap</span>
+        </div>
+        <div data-key="66" class="key">
+                <kbd>B</kbd><br>
+                <span>Clap</span>
+            </div>
+        <audio data-key="65" src="a.wav"></audio>
+        <audio data-key="66" src="b.wav"></audio>
+        <script>
+            function Play(e){
+                console.log(e.keyCode); 
+                const a=document.querySelector(`audio[data-key="${e.keyCode}"]`);
+                const key=document.querySelector(`.key[data-key="${e.keyCode}"]`);
+                console.log(a);
+                console.log(key);
+                if(!a) return;
+                a.currentTime=0;
+                a.play();
+                key.classList.add('playing');
+
+            }
+            
+            function removeTransition(e){
+            //console.log(e);
+            if(e.propertyName!= 'transform') return;
+            this.classList.remove('playing');
+            console.log(this);
+            }
+            const keys=document.querySelectorAll('.key');
+            keys.forEach(key => key.addEventListener('transitionend',removeTransition));
+
+            window.addEventListener('keydown',Play);
+        </script>
+        </body>

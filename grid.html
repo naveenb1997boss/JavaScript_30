@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Flexbox</title>
+    <link rel="stylesheet" href="grid.css">
+</head>
+
+<body>
+    <!-- <header class="flex-header">
+        HEADER
+    </header> -->
+    <main class="flex-main">
+        <nav class="flex-nav">
+            SIDENAV
+        </nav>
+        <article class="flex-article">   
+            <h1 style="text-align:center">Search</h1>  
+            <input type="text" class="input" placeholder="Enter Keyword">
+        
+            <ol class="toInsert class="toInsert list-group"></ol>
+
+            <script type="text/x-handlebars-template" id="template">
+        
+                {{#each matches}}
+                    
+                        <ol class="list-group-item">{{city}}, {{state}}, {{population}}</ol>
+                    
+                {{/each}}
+
+            </script>
+        </article>
+        <!-- <aside class="flex-aside">
+            SIDEBAR
+        </aside>         -->
+    </main>
+    <!-- <footer class="flex-footer">
+        FOOTER
+    </footer> -->
+
+
+
+
+    <script src="js/handlebars-v4.0.12.js"></script>
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/netFetch.js"></script>
+    <script>
+    document.addEventListener('mousemove',function(e){
+    
+    let displayNav=document.querySelector('.side');
+    if(e.pageX > 0 && e.pageX <= 130){
+        // console.log(e.pageX);
+        displayNav.style.visibility="visible";
+
+    }
+    else{
+        displayNav.style.visibility="hidden";
+    }
+    
+    });
+    </script>
+
+
+
+
+</body>
+
+</html>

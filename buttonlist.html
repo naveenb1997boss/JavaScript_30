@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>calculator</title>
+        <style>
+            .calculator{
+                text-align: center;
+                font-style: italic;
+                border: 2px double black;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="calculator"><br>
+            First Number:<input type="number" id="firstNumber"><br><br>
+            Second Number:<input type="number" id="secondNumber"><br><br>
+            <button name="multiply" onclick="multiply()">Multiply</button>
+            <button name="divide" onclick="divide()">Divide</button><br><br>
+            Answer:<p id="answer"></p>
+        </div>
+
+        <script>
+            let firstNumber=(document.getElementById("firstNumber"));
+            let secondNumber=(document.getElementById("secondNumber"));
+
+            function multiply()
+            {
+                document.getElementById("answer").innerHTML = parseInt(firstNumber.value) * parseInt(secondNumber.value);
+            }
+            function divide()
+            {
+                document.getElementById("answer").innerHTML=parseInt(firstNumber.value) / parseInt(secondNumber.value);
+            }
+            console.log(document.URL);
+            
+        </script>
+        
+    </body>
+</html>

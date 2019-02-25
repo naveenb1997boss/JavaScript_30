@@ -1,0 +1,56 @@
+<html>
+    <head>
+
+
+    </head>
+    <body>
+        <form class="search_form">
+            <input type="text" class="search" placeholder="City Or State">
+            <ul class="suggestions">
+                <li class="html"> Filter for cities </li><li>or states</li>
+            </ul>
+            <p id="myid"></p>
+        </form>
+
+        <script>
+            const cities=[];
+            const add='https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json';
+            const prom=fetch(add).then(blob => blob.json()).then(data => cities.push(...data));
+            // console.log(cities);
+            const search_inp=document.querySelector('.search');
+            const suggestions=document.querySelector('.suggestions');
+
+            function findword(wordToMatch, cities){
+                return cities.filter(place => {
+                    const regex=new RegExp(wordToMatch,'gi');
+                    return place.city.match(regex)|| place.state.match(regex);
+                });
+            }
+            function disp(){
+                const fdarray= findword(this.value, cities);
+                console.log(this.value);
+                // str='';
+                const html=fdarray.map(place=> {
+                    const c_name=place.city;
+                    const s_name=place.state;
+                    // console.log(c_name," ",s_name," " ,place.population,);
+                    return `
+                        <li>
+                        <span class="name">${c_name}, ${s_name}</span>
+                        <span class="population">${place.population}</span>
+                        </li>
+                        `;  
+                       // document.getElementById('myid').innerHTML  = str;
+
+                }).join('');
+                console.log('tes',html)
+                suggestions.innerHTML=html;
+                // console.log(fdarray);
+            }
+            
+            search_inp.addEventListener('change',disp);
+            //console.log(prom);
+            search_inp.addEventListener('keyup', disp);
+        </script>
+    </body>
+</html>

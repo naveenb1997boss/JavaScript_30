@@ -1,0 +1,19 @@
+<html>
+    <body>
+        <ul class="character-list-container"></ul>
+        <script id="character-template" type="text/x-handlebars-template">
+            {{#each characters}}
+            <li class="characters">
+                <h2>{{name}}</h2>
+                <p>{{house}}</p>
+            </li>
+            {{/each}}
+        </script>
+
+
+
+        <script src="js/handlebars-v4.0.12.js"></script>
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="js/script.js"></script>
+    </body>
+</html>

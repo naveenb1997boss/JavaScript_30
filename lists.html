@@ -1,0 +1,73 @@
+<html>
+    <head>
+        <style>
+        
+        .lists{
+            
+            font-size: 10px;
+            text-align:center;
+            font-family: arial;
+            color: blue;
+        }
+        input:checked + p{
+            text-decoration: line-through;
+            color:rebeccapurple;
+        }
+        
+        
+        </style>
+    </head>
+    <body>
+
+
+        <div class="lists">
+            <div class="items">
+                <input type="checkbox"> <p>Item1</p>
+            </div>
+            <div class="items">
+                <input type="checkbox"> <p>Item2</p>
+            </div>
+            <div class="items">
+                <input type="checkbox"> <p>Item3</p>
+            </div>
+            <div class="items">
+                <input type="checkbox"> <p>Item4</p>
+            </div>  
+        </div>
+
+        <script>
+            const checkboxes=document.querySelectorAll('.lists input[type="checkbox"]');
+
+            let lastChecked;
+            function strike(e)
+            {
+                let inBetweenBoxes= false;
+
+                if(e.shiftKey && this.checked){
+
+                    checkboxes.forEach(checkbox => {
+                        console.log(checkbox)
+                        if(checkbox === this || checkbox === lastChecked){
+                            inBetweenBoxes= !inBetweenBoxes;
+                        }
+                        if(inBetweenBoxes){
+                            checkbox.checked=true;
+                        }
+                    });
+                
+                }
+               // console.log(this.name);
+               lastChecked=this;
+            }
+            
+
+            checkboxes.forEach(checkbox => checkbox.addEventListener('click',strike));
+
+        </script>
+
+
+
+
+
+    </body>
+</html>

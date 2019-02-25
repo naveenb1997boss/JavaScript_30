@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.3.1.min.js"></script>
+    </head>
+    <body>
+        <script>
+         $.ajax({url: 'https://gist.githubusercontent.com/Miserlou/c5cd8364bf9b2420bb29/raw/2bf258763cdddd704f8ffd3ea9a3e81d25e2c6f6/cities.json',
+                                
+            dataType: "json",
+            success: function(response){
+                for(var i=0;i<response.length;i++)
+                {console.log(response[i].city);}
+                
+            }
+         })    
+        </script>
+
+            <ol class="inserting"></ol>
+
+        <script>
+            <li class="template">{{city}}, {{state}}</li>
+        </script>
+        <script src="js/handlebars-v4.0.12.js"></script>
+        <script src="js/jquery-3.3.1.min.js"></script>
+        <script src="tableTask.js"></script>
+    </body>    
+</html>

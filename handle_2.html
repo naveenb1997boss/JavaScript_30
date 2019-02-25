@@ -1,0 +1,25 @@
+<html>
+    <body>
+
+        <input type="text" class="inp">
+        <ol id="insert"></ol>
+        <script id="nameTemplate" type="text/x-handlebars-template">
+            {{#each names}}
+            
+            {{#if new}}
+            <h1>{{name}}</h1>
+            <p>Blood Grp: {{bloodGroup}}</p>
+            <p>House: {{#if house}} {{house}} {{else if bloodGroup}} {{bloodGroup}} {{else}} NO {{/if}}</p>
+            <!-- <p>{{new}}</p> -->
+            {{/if}}
+
+            {{/each}}
+            
+        </script>
+
+
+            <script src="js/handlebars-v4.0.12.js"></script>
+            <script src="js/jquery-3.3.1.min.js"></script>
+            <script src="js/script2.js"></script>
+    </body>
+</html>

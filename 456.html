@@ -1,0 +1,75 @@
+<html>
+    <head>
+    <style>
+    button{
+        width: 50px;;
+    }
+    </style>    
+    </head>
+<body>
+    <h2 style="opacity:1" id="faddingText">Naveen</h2>
+    <button onclick="startFading()" id="start" >Start</button> 
+    <button onclick="stopFading()" id="stop">Stop</button>
+    <input type="text" id="inp">
+    <script>
+
+
+let list=document.getElementById("inp");
+list.addEventListener('change',console.log("hi"));
+
+        function startFading()
+        {
+            console.log('Start');   
+            intervalId=setInterval(fade,500);
+
+                //console.log('start');
+            
+        }
+        function stopFading(){
+            
+                clearInterval(intervalId);
+                
+
+                console.log('stop');
+            
+        }
+        let opacity=1;
+        function fade(){
+            
+            {
+            let fadingElement=document.querySelector("#faddingText");
+            fadingElement.style.opacity=`${opacity}`;
+            console.log(fadingElement);
+            
+            if(opacity<=0){
+                opacity+=1;
+            }
+            else{
+                opacity-=1;
+            }
+            }
+        }
+
+
+
+        //  let mouseon=document.addEventListener('mouseover',zoomin);
+        //  let mouseoff=document.addEventListener('mouseout',zoomout);
+
+
+
+        function zoomin(e)
+        {
+            console.log(e)
+            // document.getElementById("start").style.width=100+"px";
+            
+        }
+        function zoomout(e)
+        {
+            console.log(e);
+            // document.getElementById("start").style.width=50+"px";
+        }
+
+
+    </script>   
+</body>    
+</html>
